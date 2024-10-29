@@ -22,11 +22,17 @@ visually as ‘significance stars’ in order to help scanning of long coefficie
 
 \item{dig.tst}{minimum number of significant digits for the test statistics}
 
-\item{...}{}
+\item{...}{other arguments}
 }
 \value{
 Parameter estimates, their SEs, test statistic, and p-value
 }
 \description{
 Summarize results of an object of class "ordinalTools"
+}
+\examples{
+\dontrun{
+fit <- ordinal_means(polr.fit)
+summary(fit)
+}
 }

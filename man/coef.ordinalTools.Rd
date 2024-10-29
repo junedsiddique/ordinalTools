@@ -8,10 +8,18 @@
 }
 \arguments{
 \item{object}{an object of class "ordinalTools"}
+
+\item{...}{other arguments}
 }
 \value{
 Coefficients extracted from the model object
 }
 \description{
 Extract model coefficients
+}
+\examples{
+\dontrun{
+fit <- ordinal_means(polr.fit)
+coef(fit)
+}
 }

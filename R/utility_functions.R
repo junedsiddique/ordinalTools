@@ -119,13 +119,12 @@ calculate_z_statistics <- function(mean, se) {
 #' @return Upper and lower bounds of a confidence interval
 #' @export
 #'
-#' @examples
 #' @keywords internal
 calculate_normal_ci <- function(output, level){
 
 a <- (1 - level)/2
 a <- c(a, 1 - a)
-pct <- format.perc(a, 3)
+pct <- format_perc(a, 3)
 fac <- stats::qnorm(a)
 
 cint <- array(NA, dim = c(nrow(output), 2L),
@@ -139,7 +138,8 @@ cint
 
 #' Print Coefficient Matrices
 #'
-#' @param object an object of class "ordinalTools"
+#' @param x an object of class "ordinalTools"
+#' @param ... other arguments
 #'
 #'
 #' @return a matrix with columns for the estimated coefficient,
@@ -147,9 +147,13 @@ cint
 #' @export
 #'
 #' @examples
-print.ordinalTools <- function(object, ...)
+#' \dontrun{
+#' fit <- ordinal_means(polr.fit)
+#' print(fit)
+#' }
+print.ordinalTools <- function(x, ...)
 {
-  printCoefmat(object$output)
+  printCoefmat(x$output)
 }
 
 #' Summarize results of an object of class "ordinalTools"
@@ -159,35 +163,48 @@ print.ordinalTools <- function(object, ...)
 #' @param signif.stars ogical; if TRUE, P-values are additionally encoded
 #' visually as ‘significance stars’ in order to help scanning of long coefficient tables.
 #' @param dig.tst minimum number of significant digits for the test statistics
-#' @param ...
+#' @param ... other arguments
 #'
 #' @return Parameter estimates, their SEs, test statistic, and p-value
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' fit <- ordinal_means(polr.fit)
+#' summary(fit)
+#' }
 summary.ordinalTools <-
   function(object, digits=max(3, getOption("digits") - 2), signif.stars=TRUE, dig.tst = max(1, min(5, digits - 1)), ...) {
     cat("\nCall:\n", paste(deparse(object$call), sep = "\n", collapse = "\n"),
         "\n\n", sep = "")
+
+    cat("Standard error method =        ", object$se.type, "\n")
     printCoefmat(object$output, digits=digits, signif.stars=signif.stars, dig.tst=dig.tst, cs.ind=1:2, tst.ind=3, Pvalues=TRUE, has.Pvalue=TRUE)
   }
+
 
 #' Extract model coefficients
 #'
 #' @param object an object of class "ordinalTools"
+#' @param ... other arguments
 #'
 #' @return Coefficients extracted from the model object
 #' @export
 #'
 #' @examples
-coef.ordinalTools <-
-  function(object,...) {
-    object$output[,"Estimate"]
-  }
+#' \dontrun{
+#' fit <- ordinal_means(polr.fit)
+#' coef(fit)
+#' }
+coef.ordinalTools <- function(object, ...) {
+  coef(object)
+}
+
 
 #' Confidence Intervals for Means
 #'
-#' @param object a object of type ordinalTools
+#' @param object a object of class "ordinalTools"
+#' @param ... other arguments
 #'
 #' @return A matrix (or vector) with columns giving
 #' lower and upper confidence limits for each parameter.
@@ -195,7 +212,11 @@ coef.ordinalTools <-
 #' @export
 #'
 #' @examples
-confint.ordinalTools <- function(object) {
+#' \dontrun{
+#' fit <- ordinal_means(polr.fit)
+#' confint(fit)
+#' }
+confint.ordinalTools <- function(object, ...) {
 
   ci <- object$conf.int
 
@@ -203,20 +224,21 @@ confint.ordinalTools <- function(object) {
 
 }
 
+
 #' Format a probability as a percentage
 #'
-#' @param probs Probabilty value
+#' @param probs Probability value
 #' @param digits The number of digits
 #'
-#' @return Formatted percentages
+#' @return Formatted percentage
 #' @export
 #'
 #' @keywords internal
-format.perc <- function (probs, digits) {
+format_perc <- function (probs, digits) {
 
-    paste(format(100 * probs, trim = TRUE,
-                 scientific = FALSE, digits = digits), "%")
-  }
+  paste(format(100 * probs, trim = TRUE,
+               scientific = FALSE, digits = digits), "%")
+}
 
 
 

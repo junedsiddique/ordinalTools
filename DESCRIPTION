@@ -3,7 +3,7 @@ Title: Tools for Working with Output from Ordinal Models
 Version: 0.0.0.9000
 Authors@R: 
     person("Juned", "Siddique", , "siddique@northwestern.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0000-0002-1501-4152"))
 Description: This package provides functions for working with output from ordinal regression models.
 License: MIT + file LICENSE
 Encoding: UTF-8

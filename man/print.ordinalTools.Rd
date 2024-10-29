@@ -4,10 +4,12 @@
 \alias{print.ordinalTools}
 \title{Print Coefficient Matrices}
 \usage{
-\method{print}{ordinalTools}(object, ...)
+\method{print}{ordinalTools}(x, ...)
 }
 \arguments{
-\item{object}{an object of class "ordinalTools"}
+\item{x}{an object of class "ordinalTools"}
+
+\item{...}{other arguments}
 }
 \value{
 a matrix with columns for the estimated coefficient,
@@ -15,4 +17,10 @@ its standard error, z-statistic and corresponding (two-sided) p-value.
 }
 \description{
 Print Coefficient Matrices
+}
+\examples{
+\dontrun{
+fit <- ordinal_means(polr.fit)
+print(fit)
+}
 }
