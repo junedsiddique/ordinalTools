@@ -16,3 +16,5 @@ Imports:
 Depends: 
     R (>= 2.10)
 LazyData: true
+URL: https://github.com/junedsiddique/ordinalTools
+BugReports: https://github.com/junedsiddique/ordinalTools/issues
