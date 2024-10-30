@@ -157,7 +157,9 @@ else if (se.type=="bootstrap" & !is.null(contrast2)) {
   cint <- rbind(cint1, cint2, cint3)
   row.names(cint) <- c("Contrast 1", "Contrast 2", "Difference")
 
-  pct <- format_perc(conf.level, 3)
+  a <- (1 - conf.level)/2
+  a <- c(a, 1 - a)
+  pct <- format_perc(a, 3)
 
   dimnames(cint) = list(row.names(output), pct)
 }
