@@ -46,8 +46,7 @@ levels of the covariates `x1` and `x2`
 fit <- ordinal_means(polr.fit, contrast1=c(0,0,0), contrast2=c(1,0,0))
 
 summary(fit)
-
-confint(fit))
+confint(fit)
 ```
 
 To calculate bootstrap standard errors and bootstrap confidence
@@ -58,8 +57,7 @@ fit <- ordinal_means(polr.fit, data=DF, contrast1=c(0,0,0), contrast2=c(1,0,0),
                      se.type="bootstrap", R=100, conf.level = 0.95)
 
 summary(fit)
-
-confint(fit))
+confint(fit)
 ```
 
 ## Installation
