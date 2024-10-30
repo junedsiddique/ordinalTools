@@ -8,6 +8,14 @@
 \description{
 This package provides functions for working with output from ordinal regression models.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/junedsiddique/ordinalTools}
+  \item Report bugs at \url{https://github.com/junedsiddique/ordinalTools/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Juned Siddique \email{siddique@northwestern.edu} (\href{https://orcid.org/0000-0002-1501-4152}{ORCID})
 
