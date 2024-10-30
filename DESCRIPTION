@@ -18,3 +18,7 @@ Depends:
 LazyData: true
 URL: https://github.com/junedsiddique/ordinalTools
 BugReports: https://github.com/junedsiddique/ordinalTools/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
