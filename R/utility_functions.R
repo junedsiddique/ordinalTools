@@ -183,24 +183,6 @@ summary.ordinalTools <-
   }
 
 
-#' Extract model coefficients
-#'
-#' @param object an object of class "ordinalTools"
-#' @param ... other arguments
-#'
-#' @return Coefficients extracted from the model object
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' fit <- ordinal_means(polr.fit)
-#' coef(fit)
-#' }
-coef.ordinalTools <- function(object, ...) {
-  coef(object)
-}
-
-
 #' Confidence Intervals for Means
 #'
 #' @param object a object of class "ordinalTools"
@@ -238,6 +220,28 @@ format_perc <- function (probs, digits) {
 
   paste(format(100 * probs, trim = TRUE,
                scientific = FALSE, digits = digits), "%")
+}
+
+#' Calculate cumulative probabilities
+#'
+#' @param contrast Contrast vector for calculating a mean based on
+#' covariate values
+#' @param n_int Number of intercept parameters
+#' @param theta Vector of intercept parameters and regression coefficients
+#'
+#' @return The cumulative probabilities associated with the specified contrast
+#' @export
+#'
+#' @keywords internal
+calculate_cumprobs <- function(contrast, n_int, theta) {
+
+  A <- create_pickoff_matrix(contrast, n_int)
+
+  cumprobs <- 1/(1 + exp(-A%*%theta))
+
+  cumprobs <- rbind(cumprobs, 1)
+
+  cumprobs
 }
 
 

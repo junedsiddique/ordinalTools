@@ -166,8 +166,23 @@ else if (se.type=="bootstrap" & !is.null(contrast2)) {
 
 coefficients <- object$output[,"Estimate"]
 
+# Unique values of the outcome
+yvals <- as.numeric(object$lev)
+
+# Cumulative probabilities
+cumprobs <- calculate_cumprobs(contrast1, n_int, theta)
+
+if (!is.null(contrast2)) {
+
+  cumprobs2 <- calculate_cumprobs(contrast2, n_int, theta)
+
+  cumprobs <- cbind(cumprobs, cumprobs2)
+
+}
+
 object <- list(call = cl, output = output, se.type = se.type,
-               conf.int = cint, coefficients=coefficients)
+               conf.int = cint, coefficients=coefficients,
+               yvals = yvals, cumprobs = cumprobs)
 
 class(object) <- "ordinalTools"
 
