@@ -12,6 +12,6 @@
 #' }
 #' @docType data
 #' @keywords datasets
-#' @usage data(smokerate)
+#' @usage data(smoke14)
 #' @source < https://doi.org/10.1046/j.1360-0443.95.11s3.7.x>
-"smokerate"
+"smoke14"
