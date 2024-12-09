@@ -236,15 +236,24 @@ calculate_difference_and_se <- function(object,
 
   vcov <- vcov(object)
 
-  # variance covariance matrix has coefficients first
+  # polr object variance covariance matrix has coefficients first
   # reorder so intercepts first
-  n_cov <- length(theta) - n_int
 
-  order <- c((n_cov+1):nrow(vcov),1:n_cov)
+  if (class(object)=="polr") {
+    n_cov <- length(theta) - n_int
 
-  new_vcov <- reorder_vcov(vcov, new_order=order)
+    order <- c((n_cov+1):nrow(vcov),1:n_cov)
 
-  se <- sqrt(deriv%*%new_vcov%*%t(deriv))
+    new_vcov <- reorder_vcov(vcov, new_order=order)
+
+    se <- sqrt(deriv%*%new_vcov%*%t(deriv))
+  }
+
+  if (class(object)=="LORgee") {
+
+    se <- sqrt(deriv%*%vcov%*%t(deriv))
+
+  }
 
   cmat <- calculate_z_statistics(diff, se)
 
