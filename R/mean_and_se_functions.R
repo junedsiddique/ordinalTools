@@ -46,37 +46,61 @@ calculate_mean <- function(object, contrast, n_int, theta, B, yvals) {
 #' @keywords internal
 bootstrap_mean <- function(data=data, i, object, contrast1, contrast2=NULL) {
 
-  d2 <- data[i,]
+
+  if (class(object)=="polr") {
+
+    d2 <- data[i,]
+
+    # Fit ordinal logistic regression model
+    bootfit <- MASS::polr(formula=formula(object$terms), data=d2)
+
+    # number of intercepts will change in each bootstrap sample
+
+    # Extract betas only
+    betas <- as.vector(coef(bootfit))
+
+    # Number of covariates
+    n_cov <- length(bootfit)
+
+    # Extract intercepts
+    zetas <- as.vector(bootfit$zeta)
+
+    # Number of intercepts
+    n_int <- length(zetas)
+
+    # Full parameter vector
+    theta <- c(zetas, betas)
+
+    # Number of parameters
+    n_params <- n_cov + n_int
+
+    # Unique values of the outcome
+    yvals <- as.numeric(bootfit$lev)
+
+  }
+
+  if (class(object)=="LORgee") {
 
   # Fit ordinal logistic regression model
-  bootfit <- MASS::polr(formula=formula(object$terms), data=d2)
+  #bootfit <- multgee::ordLORgee(formula=formula(object$terms), data=d2,
+  #                              link="logit", id=)
 
-  # number of intercepts will change in each bootstrap sample
+  # Unique values of the outcome
+  # CHANGE SO NAs not counted
+  #yvals <- sort(as.numeric(unique(d2[, outcome])))
 
-  # Extract betas only
-  betas <- as.vector(coef(bootfit))
-
-  # Number of covariates
-  n_cov <- length(bootfit)
-
-  # Extract intercepts
-  zetas <- as.vector(bootfit$zeta)
 
   # Number of intercepts
-  n_int <- length(zetas)
+  #n_int <- bootfit$categories - 1
 
   # Full parameter vector
-  theta <- c(zetas, betas)
+  #theta <- bootfit$coefficients
 
-  # Number of parameters
-  n_params <- n_cov + n_int
+  }
 
   # B matrix for turning cumulative
   # probabilities to probabilities
   B <- create_B_matrix(n_int)
-
-  # Unique values of the outcome
-  yvals <- as.numeric(bootfit$lev)
 
   mean1 <- calculate_mean(bootfit, contrast1, n_int, theta, B, yvals)
 
@@ -129,8 +153,9 @@ calculate_delta_method_se <- function(object, contrast, n_int, theta, B, yvals) 
 
   vcov <- vcov(object)
 
-  # variance covariance matrix has coefficients first
+  # polr object variance covariance matrix has coefficients first
   # reorder so intercepts first
+  if (class(object)=="polr") {
   n_cov <- length(theta) - n_int
 
   order <- c((n_cov+1):nrow(vcov),1:n_cov)
@@ -138,6 +163,14 @@ calculate_delta_method_se <- function(object, contrast, n_int, theta, B, yvals) 
   new_vcov <- reorder_vcov(vcov, new_order=order)
 
   se <- sqrt(deriv%*%new_vcov%*%t(deriv))
+  }
+
+  if (class(object)=="LORgee") {
+
+    se <- sqrt(deriv%*%vcov%*%t(deriv))
+
+  }
+
 
   se
 }
