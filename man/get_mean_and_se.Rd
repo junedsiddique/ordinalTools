@@ -5,7 +5,7 @@
 \title{Get mean and standard error from an ordinal model via
 the delta method}
 \usage{
-get_mean_and_se(object, contrast, n_int, theta, B)
+get_mean_and_se(object, contrast, n_int, theta, B, yvals)
 }
 \arguments{
 \item{object}{An object of class ``polr"}
@@ -16,6 +16,8 @@ covariate values}
 \item{n_int}{Number of intercept parameters}
 
 \item{theta}{Vector of intercept parameters and regression coefficients}
+
+\item{yvals}{Unique values of the outcome (sorted)}
 }
 \value{
 A data frame consisting of a mean, its SE, z-statistic, and p-value

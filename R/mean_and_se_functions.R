@@ -7,21 +7,19 @@
 #' @param n_int Number of intercept parameters
 #' @param theta Vector of intercept parameters and regression coefficients
 #' @param B Matrix for converting cumulative probabilities to probabilities
+#' @param yvals Unique values of the outcome (sorted)
 #'
 #' @return The mean associated with the specified contrast
 #' @export
 #'
 #' @keywords internal
-calculate_mean <- function(object, contrast, n_int, theta, B) {
+calculate_mean <- function(object, contrast, n_int, theta, B, yvals) {
 
   A <- create_pickoff_matrix(contrast, n_int)
 
   cumprobs <- 1/(1 + exp(-A%*%theta))
 
   probs <- cumprobs_to_probs(cumprobs, n_int, B)
-
-  # Unique values of the outcome
-  yvals <- as.numeric(object$lev)
 
   # Return mean
   mean <- yvals%*%probs
@@ -77,10 +75,13 @@ bootstrap_mean <- function(data=data, i, object, contrast1, contrast2=NULL) {
   # probabilities to probabilities
   B <- create_B_matrix(n_int)
 
-  mean1 <- calculate_mean(bootfit, contrast1, n_int, theta, B)
+  # Unique values of the outcome
+  yvals <- as.numeric(bootfit$lev)
+
+  mean1 <- calculate_mean(bootfit, contrast1, n_int, theta, B, yvals)
 
   if (!is.null(contrast2)) {
-    mean2 <- calculate_mean(bootfit, contrast2, n_int, theta, B)
+    mean2 <- calculate_mean(bootfit, contrast2, n_int, theta, B, yvals)
     diff <- mean1 - mean2
     output <- c(mean1, mean2, diff)
   }
@@ -100,20 +101,21 @@ bootstrap_mean <- function(data=data, i, object, contrast1, contrast2=NULL) {
 #' @param n_int Number of intercept parameters
 #' @param theta Vector of intercepts and regression coefficients
 #' @param B Matrix for converting cumulative probabilities to probabilities
+#' @param yvals Unique values of the outcome (sorted)
 #'
 #' @return The standard error of mean associated with the specified contrast
 #' vector
 #' @export
 #'
 #' @keywords internal
-calculate_delta_method_se <- function(object, contrast, n_int, theta, B) {
+calculate_delta_method_se <- function(object, contrast, n_int, theta, B, yvals) {
 
   A <- create_pickoff_matrix(contrast, n_int)
 
   cumprobs <- 1/(1 + exp(-A%*%theta))
 
   # Unique values of the outcome
-  yvals <- as.numeric(object$lev)
+  # yvals <- as.numeric(object$lev)
 
   ## Standard error of mean via delta method ##
 
@@ -161,10 +163,11 @@ calculate_difference_and_se <- function(object,
                                         contrast2,
                                         n_int,
                                         theta,
-                                        B) {
+                                        B,
+                                        yvals) {
   # Return mean
-  mean1 <- calculate_mean(object, contrast1, n_int, theta, B)
-  mean2 <- calculate_mean(object, contrast2, n_int, theta, B)
+  mean1 <- calculate_mean(object, contrast1, n_int, theta, B, yvals)
+  mean2 <- calculate_mean(object, contrast2, n_int, theta, B, yvals)
   diff <- mean1 - mean2
 
   ## Standard error of mean via delta method ##
@@ -184,7 +187,7 @@ calculate_difference_and_se <- function(object,
   cumprobs2 <- 1/(1 + exp(-A2%*%theta))
 
   # Unique values of the outcome
-  yvals <- as.numeric(object$lev)
+  # yvals <- as.numeric(object$lev)
 
   middle1 <- diag(length(cumprobs1))
 
@@ -227,18 +230,19 @@ calculate_difference_and_se <- function(object,
 #' covariate values
 #' @param n_int Number of intercept parameters
 #' @param theta Vector of intercept parameters and regression coefficients
+#' @param yvals Unique values of the outcome (sorted)
 #'
 #' @return A data frame consisting of a mean, its SE, z-statistic, and p-value
 #' @export
 #'
 #' @keywords internal
-get_mean_and_se <- function(object, contrast, n_int, theta, B) {
+get_mean_and_se <- function(object, contrast, n_int, theta, B, yvals) {
 
   # Calculate mean
-  mean <- calculate_mean(object, contrast, n_int, theta, B)
+  mean <- calculate_mean(object, contrast, n_int, theta, B, yvals)
 
   ## Standard error of mean via delta method ##
-  se <- calculate_delta_method_se(object, contrast, n_int, theta, B)
+  se <- calculate_delta_method_se(object, contrast, n_int, theta, B, yvals)
 
   cmat <- calculate_z_statistics(mean, se)
 

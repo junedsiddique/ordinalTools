@@ -4,7 +4,7 @@
 \alias{calculate_mean}
 \title{Calculate mean}
 \usage{
-calculate_mean(object, contrast, n_int, theta, B)
+calculate_mean(object, contrast, n_int, theta, B, yvals)
 }
 \arguments{
 \item{object}{An object of class "polr"}
@@ -17,6 +17,8 @@ covariate values}
 \item{theta}{Vector of intercept parameters and regression coefficients}
 
 \item{B}{Matrix for converting cumulative probabilities to probabilities}
+
+\item{yvals}{Unique values of the outcome (sorted)}
 }
 \value{
 The mean associated with the specified contrast

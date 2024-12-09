@@ -4,7 +4,15 @@
 \alias{calculate_difference_and_se}
 \title{Calculate the difference of two means and their standard error}
 \usage{
-calculate_difference_and_se(object, contrast1, contrast2, n_int, theta, B)
+calculate_difference_and_se(
+  object,
+  contrast1,
+  contrast2,
+  n_int,
+  theta,
+  B,
+  yvals
+)
 }
 \arguments{
 \item{object}{An object of class "polr"}

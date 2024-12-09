@@ -4,7 +4,7 @@
 \alias{calculate_delta_method_se}
 \title{Calculate Delta Method Standard Error}
 \usage{
-calculate_delta_method_se(object, contrast, n_int, theta, B)
+calculate_delta_method_se(object, contrast, n_int, theta, B, yvals)
 }
 \arguments{
 \item{object}{An object of class "polr"}
@@ -17,6 +17,8 @@ covariate values}
 \item{theta}{Vector of intercepts and regression coefficients}
 
 \item{B}{Matrix for converting cumulative probabilities to probabilities}
+
+\item{yvals}{Unique values of the outcome (sorted)}
 }
 \value{
 The standard error of mean associated with the specified contrast

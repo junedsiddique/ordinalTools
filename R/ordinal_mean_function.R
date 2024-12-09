@@ -65,10 +65,13 @@ if (se.type=="bootstrap" & is.null(data)){
   }
 
 # Extract betas only
-#betas <- as.vector(coef(object))
+betas <- as.vector(coef(object))
 
 # Number of covariates
 n_cov <- length(betas)
+
+# Unique values of the outcome
+yvals <- as.numeric(object$lev)
 
 # Extract intercepts
 zetas <- as.vector(object$zeta)
@@ -88,7 +91,7 @@ B <- create_B_matrix(n_int)
 
 if (se.type=="delta" & is.null(contrast2)) {
 
-c1 <- get_mean_and_se(object, contrast1, n_int=n_int, theta=theta, B=B)
+c1 <- get_mean_and_se(object, contrast1, n_int=n_int, theta=theta, B=B, yvals=yvals)
 output <- c1
 row.names(output) <- c("Contrast 1")
 
@@ -120,9 +123,9 @@ else if (se.type=="bootstrap" & is.null(contrast2)) {
 }
 
 else if (se.type=="delta" & !is.null(contrast2)){
-  c1 <- get_mean_and_se(object, contrast1, n_int=n_int, theta=theta, B=B)
-  c2  <- get_mean_and_se(object, contrast2, n_int=n_int, theta=theta, B=B)
-  diff <- calculate_difference_and_se(object, contrast1, contrast2, n_int=n_int, theta=theta, B)
+  c1 <- get_mean_and_se(object, contrast1, n_int=n_int, theta=theta, B=B, yvals=yvals)
+  c2  <- get_mean_and_se(object, contrast2, n_int=n_int, theta=theta, B=B, yvals=yvals)
+  diff <- calculate_difference_and_se(object, contrast1, contrast2, n_int=n_int, theta=theta, B, yvals=yvals)
   output <- rbind(c1, c2, diff)
   row.names(output) <- c("Contrast 1", "Contrast 2", "Difference")
   cint <- calculate_normal_ci(output, level=conf.level)
