@@ -65,7 +65,7 @@ if (se.type=="bootstrap" & is.null(data)){
   }
 
 # Extract betas only
-betas <- as.vector(coef(object))
+#betas <- as.vector(coef(object))
 
 # Number of covariates
 n_cov <- length(betas)
